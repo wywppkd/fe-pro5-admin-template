@@ -46,12 +46,15 @@ const Login: React.FC<{}> = () => {
   const [userLoginState, setUserLoginState] = useState<API.LoginStateType>({});
   const [type, setType] = useState<string>('account');
   const { initialState, setInitialState } = useModel('@@initialState');
+  console.log('🚀 ~ file: index.tsx ~ line 54 ~ initialState', initialState);
 
   const intl = useIntl();
 
+  /** 获取用户信息 */
   const fetchUserInfo = async () => {
     const userInfo = await initialState?.fetchUserInfo?.();
     if (userInfo) {
+      // 手动设置 initialState
       setInitialState({
         ...initialState,
         currentUser: userInfo,
@@ -59,6 +62,7 @@ const Login: React.FC<{}> = () => {
     }
   };
 
+  /** 提交 */
   const handleSubmit = async (values: LoginParamsType) => {
     setSubmitting(true);
     try {

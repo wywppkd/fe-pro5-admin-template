@@ -1,6 +1,6 @@
 import React from 'react';
 import { BasicLayoutProps, Settings as LayoutSettings, PageLoading } from '@ant-design/pro-layout';
-import { notification } from 'antd';
+import { message, notification } from 'antd';
 import { history, RequestConfig } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
@@ -113,4 +113,35 @@ const errorHandler = (error: ResponseError) => {
 
 export const request: RequestConfig = {
   errorHandler,
+  // 请求拦截器
+  requestInterceptors: [
+    (url, options) => {
+      const tmpOptions = options;
+      const token = 'xxx-TODO';
+      if (token) {
+        tmpOptions.headers = { ...options.headers, ...{ Authorization: token } };
+      }
+      return {
+        options: tmpOptions,
+        url,
+      };
+    },
+  ],
+  // 响应拦截器
+  responseInterceptors: [
+    async (response) => {
+      const res = await response.clone().json();
+      if (!res.success) {
+        const errmsg = res.errmsg || res.errMsg || '未知的业务处理错误';
+        message.error(`${errmsg}`);
+        const errcode = res.errcode || res.errCode;
+        // 需要重新登录的错误码
+        if (errcode === 10110002) {
+          message.error('你的登录已失效, 请重新登录');
+          // TODO 登录失效: 删除token 删除用户信息, 跳转登录页
+        }
+      }
+      return response;
+    },
+  ],
 };
