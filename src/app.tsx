@@ -7,6 +7,7 @@ import Footer from '@/components/Footer';
 import { ResponseError } from 'umi-request';
 import { queryCurrent } from './services/user';
 import defaultSettings from '../config/defaultSettings';
+import { getToken, removeToken } from './utils/auth';
 
 /**
  * 获取用户信息比较慢的时候会展示一个 loading
@@ -15,23 +16,27 @@ export const initialStateConfig = {
   loading: <PageLoading />,
 };
 
+/** getInitialState 会在整个应用最开始时执行 */
 export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
   currentUser?: API.CurrentUser;
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
+  /** 获取用户信息 */
   const fetchUserInfo = async () => {
     try {
       const currentUser = await queryCurrent();
       return currentUser;
     } catch (error) {
+      removeToken();
       history.push('/user/login');
     }
     return undefined;
   };
-  // 如果是登录页面，不执行
+  // 进入应用, 判断是非登录页, 则获取用户信息
   if (history.location.pathname !== '/user/login') {
     const currentUser = await fetchUserInfo();
+    console.log('🚀 ~ file: app.tsx ~ line 39 ~ getInitialState ~ currentUser', currentUser);
     return {
       fetchUserInfo,
       currentUser,
@@ -55,11 +60,13 @@ export const layout = ({
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     footerRender: () => <Footer />,
-    onPageChange: () => {
+    onPageChange: async () => {
       const { currentUser } = initialState;
       const { location } = history;
-      // 如果没有登录，重定向到 login
-      if (!currentUser && location.pathname !== '/user/login') {
+      const token = getToken();
+      // 如果没有登录(无token或者无currentUser)，重定向到 login
+      if ((!token || !currentUser) && location.pathname !== '/user/login') {
+        removeToken();
         history.push('/user/login');
       }
     },
@@ -113,13 +120,13 @@ const errorHandler = (error: ResponseError) => {
 
 export const request: RequestConfig = {
   errorHandler,
-  // 请求拦截器
+  // 请求拦截器: 请求头增加 token
   requestInterceptors: [
     (url, options) => {
       const tmpOptions = options;
-      const token = 'xxx-TODO';
+      const token = getToken();
       if (token) {
-        tmpOptions.headers = { ...options.headers, ...{ Authorization: token } };
+        tmpOptions.headers = { ...options.headers, Authorization: token };
       }
       return {
         options: tmpOptions,
@@ -132,12 +139,14 @@ export const request: RequestConfig = {
     async (response) => {
       const res = await response.clone().json();
       if (!res.success) {
-        const errmsg = res.errmsg || res.errMsg || '未知的业务处理错误';
-        message.error(`${errmsg}`);
+        // const errmsg = res.errmsg || res.errMsg || '未知的业务处理错误';
+        // message.error(`${errmsg}`);
         const errcode = res.errcode || res.errCode;
         // 需要重新登录的错误码
         if (errcode === 10110002) {
+          removeToken();
           message.error('你的登录已失效, 请重新登录');
+          history.push('/user/login');
           // TODO 登录失效: 删除token 删除用户信息, 跳转登录页
         }
       }

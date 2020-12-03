@@ -4,6 +4,7 @@ import { Avatar, Menu, Spin } from 'antd';
 import { history, useModel } from 'umi';
 import { outLogin } from '@/services/login';
 import { stringify } from 'querystring';
+import { removeToken } from '@/utils/auth';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 
@@ -20,6 +21,7 @@ const loginOut = async () => {
   const { redirect } = query;
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/user/login' && !redirect) {
+    removeToken();
     history.replace({
       pathname: '/user/login',
       search: stringify({

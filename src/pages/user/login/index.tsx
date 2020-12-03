@@ -13,6 +13,7 @@ import ProForm, { ProFormCaptcha, ProFormCheckbox, ProFormText } from '@ant-desi
 import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
 import Footer from '@/components/Footer';
 import { fakeAccountLogin, getFakeCaptcha, LoginParamsType } from '@/services/login';
+import { setToken } from '@/utils/auth';
 
 import styles from './index.less';
 
@@ -70,6 +71,7 @@ const Login: React.FC<{}> = () => {
       const msg = await fakeAccountLogin({ ...values, type });
       if (msg.status === 'ok') {
         message.success('登录成功！');
+        setToken('TODO');
         await fetchUserInfo();
         goto();
         return;

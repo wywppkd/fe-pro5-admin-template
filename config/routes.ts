@@ -1,4 +1,6 @@
-﻿export default [
+﻿import permissionMap from '../src/utils/permissionMap';
+
+export default [
   {
     path: '/user',
     layout: false,
@@ -20,13 +22,15 @@
     path: '/admin',
     name: 'admin',
     icon: 'crown',
-    access: 'canAdmin',
+    // access: 'canAdmin',
+    access: permissionMap.index,
     component: './Admin',
     routes: [
       {
         path: '/admin/sub-page',
         name: 'sub-page',
         icon: 'smile',
+        access: permissionMap.index_item,
         component: './Welcome',
       },
     ],
@@ -35,6 +39,7 @@
     name: 'list.table-list',
     icon: 'table',
     path: '/list',
+    access: permissionMap.table,
     component: './ListTableList',
   },
   {
