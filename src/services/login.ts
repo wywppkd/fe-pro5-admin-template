@@ -24,20 +24,17 @@
 // }
 import request from '@/utils/request';
 
-export interface LoginParamsType {
-  username: string;
-  password: string;
-}
-
 /** 登录 */
-export async function accountLogin(data: LoginParamsType): Promise<API.BaseType<API.LoginResType>> {
+export async function accountLogin(
+  data: API.LoginParamsType,
+): Promise<API.BaseType<API.LoginResType>> {
   return request.post({
-    url: '/api/user/login',
+    url: '/user/login',
     data,
   });
 }
 
 /** 退出登录 */
 export async function outLogin() {
-  return request.post({ url: '/api/user/logout' });
+  return request.post({ url: '/user/logout' });
 }

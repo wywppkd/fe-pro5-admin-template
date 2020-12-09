@@ -119,6 +119,7 @@ const errorHandler = (error: ResponseError) => {
 };
 
 export const request: RequestConfig = {
+  prefix: '/api',
   errorHandler,
   // 请求拦截器: 请求头增加 token
   requestInterceptors: [

@@ -45,6 +45,12 @@ declare namespace API {
     data: T;
   };
 
+  /** 登录请求参数 */
+  export type LoginParamsType = {
+    username: string;
+    password: string;
+  };
+
   /** 登录返回数据 */
   export type LoginResType = {
     token: string;
