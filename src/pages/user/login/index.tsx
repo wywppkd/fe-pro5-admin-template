@@ -2,9 +2,9 @@ import { LockTwoTone, UserOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import React, { useState } from 'react';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
-import { useIntl, Link, history, FormattedMessage, SelectLang, useModel } from 'umi';
+import { useIntl, Link, history, FormattedMessage, useModel } from 'umi';
 import Footer from '@/components/Footer';
-import { accountLogin, LoginParamsType } from '@/services/login';
+import { accountLogin } from '@/services/login';
 import { setToken } from '@/utils/auth';
 
 import styles from './index.less';
@@ -40,7 +40,7 @@ const Login: React.FC<{}> = () => {
   };
 
   /** 提交 */
-  const handleSubmit = async (values: LoginParamsType) => {
+  const handleSubmit = async (values: API.LoginParamsType) => {
     setSubmitting(true);
     try {
       // 登录
@@ -59,7 +59,6 @@ const Login: React.FC<{}> = () => {
   };
   return (
     <div className={styles.container}>
-      <div className={styles.lang}>{SelectLang && <SelectLang />}</div>
       <div className={styles.content}>
         <div className={styles.top}>
           <div className={styles.header}>
