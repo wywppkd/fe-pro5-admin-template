@@ -19,14 +19,14 @@ export const initialStateConfig = {
 /** getInitialState 会在整个应用最开始时执行 */
 export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
-  currentUser?: API.CurrentUser;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  currentUser?: API.UserInfoType;
+  fetchUserInfo?: () => Promise<API.UserInfoType | undefined>;
 }> {
   /** 获取用户信息 */
   const fetchUserInfo = async () => {
     try {
       const currentUser = await queryCurrent();
-      return currentUser;
+      return currentUser.data;
     } catch (error) {
       removeToken();
       history.push('/user/login');
@@ -52,7 +52,7 @@ export async function getInitialState(): Promise<{
 export const layout = ({
   initialState,
 }: {
-  initialState: { settings?: LayoutSettings; currentUser?: API.CurrentUser };
+  initialState: { settings?: LayoutSettings; currentUser?: API.UserInfoType };
 }): BasicLayoutProps & {
   childrenRender?: (dom: JSX.Element) => React.ReactNode;
 } => {

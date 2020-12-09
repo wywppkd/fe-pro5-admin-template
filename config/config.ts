@@ -48,4 +48,5 @@ export default defineConfig({
     type: 'browser',
   },
   exportStatic: {},
+  mock: false,
 });

@@ -14,15 +14,21 @@
 
 import request from '@/utils/request';
 
-export async function query() {
-  return request.get({
-    url: '/api/users',
-  });
-}
+// export async function query() {
+//   return request.get({
+//     url: '/api/users',
+//   });
+// }
 
-export async function queryCurrent() {
+// export async function queryCurrent() {
+//   return request.get({
+//     url: '/api/currentUser',
+//   });
+// }
+
+export async function queryCurrent(): Promise<API.BaseType<API.UserInfoType>> {
   return request.get({
-    url: '/api/currentUser',
+    url: '/api/user/info',
   });
 }
 
