@@ -13,4 +13,11 @@ export default {
       pathRewrite: { '^/api': '' },
     },
   },
+  pre: {
+    '/api/': {
+      target: 'http://rap2api.taobao.org/app/mock/230933',
+      changeOrigin: true,
+      pathRewrite: { '^/api': '' },
+    },
+  },
 };
