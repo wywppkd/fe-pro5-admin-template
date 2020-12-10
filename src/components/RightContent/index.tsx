@@ -2,7 +2,6 @@ import { Space } from 'antd';
 import React from 'react';
 import { useModel } from 'umi';
 import Avatar from './AvatarDropdown';
-// import HeaderSearch from '../HeaderSearch';
 import styles from './index.less';
 
 export type SiderTheme = 'light' | 'dark';
