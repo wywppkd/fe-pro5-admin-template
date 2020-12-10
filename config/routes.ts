@@ -3,7 +3,7 @@
 export default [
   {
     path: '/user',
-    layout: false,
+    layout: false, // 不展示layout
     routes: [
       {
         name: 'login',
@@ -22,7 +22,6 @@ export default [
     path: '/admin',
     name: 'admin',
     icon: 'crown',
-    // access: 'canAdmin',
     access: permissionMap.index,
     component: './Admin',
     routes: [

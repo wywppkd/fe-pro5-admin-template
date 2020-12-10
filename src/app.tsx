@@ -64,7 +64,7 @@ export const layout = ({
       const { currentUser } = initialState;
       const { location } = history;
       const token = getToken();
-      // 如果没有登录(无token或者无currentUser)，重定向到 login
+      // 判断登录状态(无token或者无currentUser)
       if ((!token || !currentUser) && location.pathname !== '/user/login') {
         removeToken();
         history.push('/user/login');
