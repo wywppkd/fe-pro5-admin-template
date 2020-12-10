@@ -4,7 +4,7 @@ import { Card, Typography, Alert } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
 
 export default (): React.ReactNode => (
-  <PageContainer content=" 这个页面只有 admin 权限才能查看">
+  <PageContainer>
     <Card>
       <Alert
         message="umi ui 现已发布，欢迎使用 npm run ui 启动体验。"
