@@ -42,6 +42,20 @@ export default [
     component: './ListTableList',
   },
   {
+    name: 'my',
+    path: '/my',
+    icon: 'Apartment',
+    routes: [
+      {
+        name: 'list',
+        icon: 'table',
+        path: '/my/my-list',
+        access: permissionMap.table,
+        component: './MyList',
+      },
+    ],
+  },
+  {
     path: '/',
     redirect: '/welcome',
   },

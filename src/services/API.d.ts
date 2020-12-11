@@ -1,5 +1,5 @@
 declare namespace API {
-  /** 接口返回数据的基础结构 */
+  /** 响应数据 */
   export type BaseType<T> = {
     /** 业务处理是否成功 */
     success: boolean;
@@ -10,6 +10,14 @@ declare namespace API {
     /** 主要业务数据 */
     data: T;
   };
+
+  /** 响应数据(带分页参数) */
+  export type BasePageType<T> = BaseType<{
+    pageNum: number;
+    pageSize: number;
+    total: number;
+    list: T;
+  }>;
 
   /** 登录请求参数 */
   export type LoginParamsType = {
