@@ -36,7 +36,6 @@ export async function getInitialState(): Promise<{
   // 进入应用, 判断是非登录页, 则获取用户信息
   if (history.location.pathname !== '/user/login') {
     const currentUser = await fetchUserInfo();
-    console.log('🚀 ~ file: app.tsx ~ line 39 ~ getInitialState ~ currentUser', currentUser);
     return {
       fetchUserInfo,
       currentUser,

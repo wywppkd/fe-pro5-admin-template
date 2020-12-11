@@ -29,7 +29,6 @@ const loginOut = async () => {
 
 const AvatarDropdown = () => {
   const { initialState, setInitialState } = useModel('@@initialState');
-  console.log('🚀 ~ file: AvatarDropdown.tsx ~ line 36 ~ initialState', initialState);
 
   const onMenuClick = useCallback(
     (event: {

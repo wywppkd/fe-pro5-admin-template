@@ -26,7 +26,7 @@ export default defineConfig({
     // 默认语言
     default: 'zh-CN',
     // 是否支持 antd 国际化
-    antd: false,
+    antd: true,
     // 是否开启浏览器语言检测: 通过 `navigator.language` 覆盖默认值
     baseNavigator: false,
   },
