@@ -109,7 +109,7 @@ const errorHandler = (error: ResponseError) => {
       description: errorText,
     });
   } else if (data) {
-    // 状态码2xx, 但是success:false: 也就是业务处理失败
+    // 状态码2xx & success:false: 也就是业务处理失败
     const errmsg = data.errmsg || data.errMsg || '未知的业务处理错误'; // 兼容历史接口: 驼峰 or 全小写
     const errcode = data.errcode || data.errCode || '未知'; // 兼容历史接口: 驼峰 or 全小写
     if (errcode === 10110002) {
