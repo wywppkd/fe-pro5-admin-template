@@ -9,6 +9,7 @@ export default {
   dev: {
     '/api/': {
       target: 'http://rap2api.taobao.org/app/mock/230933',
+      // target: 'https://crm.huodong.hetaobiancheng.com',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },

@@ -94,11 +94,13 @@ const codeMessage = {
 };
 
 /**
- * 异常处理程序
+ * 统一进行异常处理
+ * 什么情况会进入该异常处理: 状态码非2xx | success不是true | 请求没发出去或没有响应信息
  */
 const errorHandler = (error: ResponseError) => {
-  const { response } = error;
+  const { response, data } = error;
   if (response && response.status) {
+    // 请求已发送但服务端返回状态码非 2xx 的响应: 也就是业务处理异常
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
 
@@ -106,14 +108,33 @@ const errorHandler = (error: ResponseError) => {
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
     });
-  }
-
-  if (!response) {
+  } else if (data) {
+    // 状态码2xx, 但是success:false: 也就是业务处理失败
+    const errmsg = data.errmsg || data.errMsg || '未知的业务处理错误'; // 兼容历史接口: 驼峰 or 全小写
+    const errcode = data.errcode || data.errCode || '未知'; // 兼容历史接口: 驼峰 or 全小写
+    if (errcode === 10110002) {
+      // 10110002: 登录过期, token无效等表示需要重新登录
+      removeToken();
+      message.error('你的登录已失效, 请重新登录');
+      history.push('/user/login');
+    } else {
+      // 其他错误码统一提示
+      message.error(`${errmsg}(错误码:${errcode})`);
+    }
+  } else {
+    // 请求初始化时出错或者没有响应返回的异常
     notification.error({
       description: '您的网络发生异常，无法连接服务器',
       message: '网络异常',
     });
   }
+
+  // if (!response) {
+  // notification.error({
+  //   description: '您的网络发生异常，无法连接服务器',
+  //   message: '网络异常',
+  // });
+  // }
   throw error;
 };
 
@@ -135,22 +156,9 @@ export const request: RequestConfig = {
     },
   ],
   // 响应拦截器
-  responseInterceptors: [
-    async (response) => {
-      const res = await response.clone().json();
-      if (!res.success) {
-        // const errmsg = res.errmsg || res.errMsg || '未知的业务处理错误';
-        // message.error(`${errmsg}`);
-        const errcode = res.errcode || res.errCode;
-        // 需要重新登录的错误码
-        if (errcode === 10110002) {
-          removeToken();
-          message.error('你的登录已失效, 请重新登录');
-          history.push('/user/login');
-          // TODO 登录失效: 删除token 删除用户信息, 跳转登录页
-        }
-      }
-      return response;
-    },
-  ],
+  // responseInterceptors: [
+  //   async (response) => {
+  //     return response;
+  //   },
+  // ],
 };
