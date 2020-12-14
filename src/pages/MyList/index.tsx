@@ -22,7 +22,7 @@ const Mylist = () => {
       title: '年龄',
       dataIndex: 'age',
       // 渲染函数
-      render(text, record, index) {
+      render(text) {
         // text 当前行数据中 age 字段的值
         // record 当前行数据
         // index 当前行索引
@@ -45,22 +45,13 @@ const Mylist = () => {
         }}
         // 如果实际接口入参出参的数据类型与 ProTable 规定的不一致需要自行处理
         request={async (params) => {
-          console.log('🚀 ~ file: index.tsx ~ line 87 ~ request={ ~ params', params);
-          // params 数据类型:
-          // {
-          //     pageSize?: number | undefined;
-          //     current?: number | undefined;
-          //     keyword?: string | undefined;
-          // }
-
-          // 处理接口实际入参
+          // 接口实际入参
           const paramsReal = {
             pageNum: params.current,
             ...params,
           };
           const res = await getMyList({ ...paramsReal });
-          console.log('🚀 ~ file: index.tsx ~ line 80 ~ request={ ~ res', res);
-          // ProTable 规定响应数据格式:
+          // ProTable request 规定响应数据格式:
           // {
           //     data: T[];
           //     success?: boolean;

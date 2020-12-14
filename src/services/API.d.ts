@@ -11,7 +11,7 @@ declare namespace API {
     data: T;
   };
 
-  /** 响应数据(带分页参数) */
+  /** 响应数据(带分页数据) */
   export type BasePageType<T> = BaseType<{
     pageNum: number;
     pageSize: number;
