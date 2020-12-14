@@ -95,7 +95,7 @@ const codeMessage = {
 
 /**
  * 统一进行异常处理
- * 什么情况会进入该异常处理: 状态码非2xx | success不是true | 请求没发出去或没有响应信息
+ * 什么情况会进入该异常处理: 状态码非2xx | success:false | 请求没发出去或没有响应信息
  */
 const errorHandler = (error: ResponseError) => {
   const { response, data } = error;
@@ -133,7 +133,6 @@ const errorHandler = (error: ResponseError) => {
 };
 
 export const request: RequestConfig = {
-  prefix: '/api', // 设置统一的请求地址前缀, 方便反向代理区分哪些是接口请求
   errorHandler,
   // 请求拦截器: 请求头增加 token
   requestInterceptors: [

@@ -59,7 +59,7 @@ const Mylist = () => {
           //     [key: string]: any;
           // }
 
-          // 处理接口实际出参
+          // 将响应数据转为 ProTable request 要求的格式
           return {
             data: res?.data?.list,
             success: res?.success,
