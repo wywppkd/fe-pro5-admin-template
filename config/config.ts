@@ -59,4 +59,8 @@ export default defineConfig({
   },
   exportStatic: {},
   mock: false,
+  // 路由前缀
+  base: '/', // TODO, 当网站根路径是 https://www.baidu.com/app/ 时, 设置为 /app/
+  // 静态文件路径
+  publicPath: '/', // TODO, 当网站根路径是 https://www.baidu.com/app/ 时, 设置为 /app/
 });
