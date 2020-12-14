@@ -11,7 +11,7 @@ export default {
       target: 'http://rap2api.taobao.org/app/mock/230933',
       // target: 'https://crm.huodong.hetaobiancheng.com',
       changeOrigin: true,
-      pathRewrite: { '^/api': '' },
+      pathRewrite: { '^/api': '' }, // 去掉接口路径的 /api 前缀
     },
   },
   pre: {

@@ -100,7 +100,7 @@ const codeMessage = {
 const errorHandler = (error: ResponseError) => {
   const { response, data } = error;
   if (response && response.status) {
-    // 请求已发送但服务端返回状态码非 2xx 的响应: 也就是业务处理异常
+    // 状态码非 2xx 的响应: 也就是业务处理异常
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
 
@@ -122,24 +122,17 @@ const errorHandler = (error: ResponseError) => {
       message.error(`${errmsg}(错误码:${errcode})`);
     }
   } else {
-    // 请求初始化时出错或者没有响应返回的异常
+    // 请求发出前出错或没有响应
     notification.error({
       description: '您的网络发生异常，无法连接服务器',
       message: '网络异常',
     });
   }
-
-  // if (!response) {
-  // notification.error({
-  //   description: '您的网络发生异常，无法连接服务器',
-  //   message: '网络异常',
-  // });
-  // }
   throw error;
 };
 
 export const request: RequestConfig = {
-  prefix: '/api',
+  prefix: '/api', // 设置统一的请求地址前缀, 方便反向代理区分哪些是接口请求
   errorHandler,
   // 请求拦截器: 请求头增加 token
   requestInterceptors: [
@@ -155,10 +148,4 @@ export const request: RequestConfig = {
       };
     },
   ],
-  // 响应拦截器
-  // responseInterceptors: [
-  //   async (response) => {
-  //     return response;
-  //   },
-  // ],
 };
