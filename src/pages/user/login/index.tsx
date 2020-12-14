@@ -2,7 +2,7 @@ import { LockTwoTone, UserOutlined } from '@ant-design/icons';
 import { message } from 'antd';
 import React, { useState } from 'react';
 import ProForm, { ProFormText } from '@ant-design/pro-form';
-import { useIntl, Link, history, FormattedMessage, useModel } from 'umi';
+import { Link, history, FormattedMessage, useModel } from 'umi';
 import Footer from '@/components/Footer';
 import { accountLogin } from '@/services/login';
 import { setToken } from '@/utils/auth';
@@ -24,8 +24,6 @@ const goto = () => {
 const Login: React.FC<{}> = () => {
   const [submitting, setSubmitting] = useState(false);
   const { initialState, setInitialState } = useModel('@@initialState');
-
-  const intl = useIntl();
 
   /** 获取用户信息 */
   const fetchUserInfo = async () => {
@@ -77,10 +75,7 @@ const Login: React.FC<{}> = () => {
             }}
             submitter={{
               searchConfig: {
-                submitText: intl.formatMessage({
-                  id: 'pages.login.submit',
-                  defaultMessage: '登录',
-                }),
+                submitText: '登录',
               },
               render: (_, dom) => dom.pop(),
               submitButtonProps: {

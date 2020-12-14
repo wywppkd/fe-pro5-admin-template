@@ -1,8 +1,13 @@
 # 介绍
 
 - 该项目模板是基于 Ant Design Pro v5 二次开发的
-- 实现功能: 登录鉴权, 权限管理(菜单渲染, 路由控制, 页面展示), 接口请求错误统一处理
-- 去掉了菜单国际化配置
+  - 登录鉴权: 登录成功后将 token 存储到 cookie 中, 使用 token 换取当前用户信息(id,name,权限码...), 前端根据 `tokenc + 用户信息` 判断用户已登录
+    - 每次页面跳转根据 `token + 用户信息` 确认当前用户为登录状态, 未登录则清除`token + 用户信息`跳登录页
+    - 每次请求接口, 统一判断接口响应数据中的 errcode, 如果是 xxx 代表登录过期, 清除`token + 用户信息`跳登录页
+    - 涉及代码逻辑: `src/app.tsx`, `src/pages/user/login`, 
+  - 权限管理(菜单渲染, 路由控制, 页面展示)
+  - umi-request 二次封装
+  - 去掉菜单国际化配置
 
 ## 相关文档
 
@@ -11,7 +16,7 @@
 - UmiJS@3x 插件: https://umijs.org/zh-CN/plugins/api
 - ProComponents 重型组件: https://procomponents.ant.design/components
 
-## 请求接口错误处理
+## umi-request 二次封装
 
 > 针对 `接口异常, 业务处理失败, 没有响应信息` 这三种情况进行了统一的错误处理 `src/app.tsx` 的 `errorHandler`
 
