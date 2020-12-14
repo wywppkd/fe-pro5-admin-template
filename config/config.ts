@@ -19,6 +19,9 @@ export default defineConfig({
     // 是否开启国际化配置: 如菜单名会从 locales 中查找
     locale: true,
     siderWidth: 208,
+    menu: {
+      locale: false, // 关闭菜单的国际化
+    },
     ...defaultSettings,
   },
   // 国际化配置
