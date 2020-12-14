@@ -33,8 +33,8 @@
 ```js
 // 请求参数
 {
-  username: string;
-  password: string;
+  username: "admin";
+  password: "123456";
 }
 
 // 响应数据
@@ -84,10 +84,6 @@
   "data": null
 }
 ```
-
-## 待完善
-
-- 该模板只考虑了反向代理解决跨域问题, 如果要使用 CORS, 并且想要根据环境变量设置 umi-request 的 prefix, 解决思路 [umi 多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE).
 
 ## 目录
 
@@ -149,3 +145,7 @@
 │       └── utils.ts
 └── tsconfig.json
 ```
+
+## 待完善
+
+- 该模板只考虑了反向代理解决跨域问题, 如果要使用 CORS, 并且想要根据环境变量设置 umi-request 的 prefix, 解决思路 [umi 多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE)

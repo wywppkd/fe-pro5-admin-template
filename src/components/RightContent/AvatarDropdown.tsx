@@ -12,22 +12,18 @@ import styles from './index.less';
  * 退出登录，并且将当前的 url 保存
  */
 const loginOut = async () => {
+  // 无论接口请求是否成功, 都不要影响退出登录的操作
   try {
     await outLogin();
   } catch (error) {
     // console.log('🚀 ~ file: AvatarDropdown.tsx ~ line 27 ~ loginOut ~ error', error);
   }
 
-  const { query } = history.location;
-  const { redirect } = query;
   // Note: There may be security issues, please note
-  if (window.location.pathname !== '/user/login' && !redirect) {
+  if (window.location.pathname !== '/user/login') {
     removeToken();
     history.replace({
       pathname: '/user/login',
-      // search: stringify({
-      //   redirect: pathname,
-      // }),
     });
   }
 };
