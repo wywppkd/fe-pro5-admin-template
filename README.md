@@ -22,8 +22,69 @@
 ## 准备开发
 
 - 推荐工具: VSCode + Prettier-Code formatter(VSCode插件) -> 保存时自动格式化
-- 全局搜索`TODO`, 确认可能需要修改的地方
+- 全局搜索 "TODO", 确认可能需要修改的地方
 
-## TODO
+### 确认实际接口与当前项目接口是否一致
 
-- 如果是CORS, 根据环境变量修改请求地址
+> 不一致则根据实际接口修改对应代码
+
+- 登录接口 `/api/user/login`
+
+```js
+// 请求参数
+{
+  username: string;
+  password: string;
+}
+
+// 响应数据
+{
+  "errcode": 119,// 错误码
+  "errmsg": "账号或密码错误",// 错误信息
+  "success": true,// 业务处理成功
+  "data": {
+    "token": "xxx-xxx-xx"
+  }
+}
+```
+
+- 获取用户信息接口 `/api/user/getInfo`
+
+```js
+{
+  "errcode": 0,
+  "errmsg": "success",
+  "success": true,
+  "data": {
+    // 权限码
+    "permissionCodeList": [
+      "index",
+      "index_item",
+      "table",
+      "my_list"
+    ],
+    // 用户信息
+    "userInfo": {
+      // 用户ID
+      "userId": 30000577,
+      // 用户名
+      "name": "admin"
+    }
+  }
+}
+```
+
+- 退出登录 `/api/user/logout`
+
+```js
+{
+  "errcode": 123,
+  "errmsg": "退出登录失败",
+  "success": true,
+  "data": null
+}
+```
+
+## 待完善
+
+- 该模板只考虑了反向代理解决跨域问题, 如果要使用 CORS, 并且想要根据环境变量设置 umi-request 的 prefix, 解决思路 [umi 多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE)

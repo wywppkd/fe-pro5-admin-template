@@ -8,16 +8,16 @@
 export default {
   dev: {
     '/api/': {
-      target: 'http://rap2api.taobao.org/app/mock/230933',
+      target: 'http://rap2api.taobao.org/app/mock/230933', // TODO: 请求的接口地址
       changeOrigin: true,
       // pathRewrite: { '^': '' },
     },
   },
-  pre: {
-    '/api/': {
-      target: 'http://rap2api.taobao.org/app/mock/230933',
-      changeOrigin: true,
-      // pathRewrite: { '^': '' },
-    },
-  },
+  // pre: {
+  //   '/api/': {
+  //     target: 'http://rap2api.taobao.org/app/mock/230933',
+  //     changeOrigin: true,
+  //     // pathRewrite: { '^': '' },
+  //   },
+  // },
 };
