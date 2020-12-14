@@ -3,7 +3,7 @@ import { LogoutOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
 import { history, useModel } from 'umi';
 import { outLogin } from '@/services/login';
-import { stringify } from 'querystring';
+// import { stringify } from 'querystring';
 import { removeToken } from '@/utils/auth';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
@@ -12,17 +12,22 @@ import styles from './index.less';
  * 退出登录，并且将当前的 url 保存
  */
 const loginOut = async () => {
-  await outLogin();
-  const { query, pathname } = history.location;
+  try {
+    await outLogin();
+  } catch (error) {
+    console.log('🚀 ~ file: AvatarDropdown.tsx ~ line 27 ~ loginOut ~ error', error);
+  }
+
+  const { query } = history.location;
   const { redirect } = query;
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/user/login' && !redirect) {
     removeToken();
     history.replace({
       pathname: '/user/login',
-      search: stringify({
-        redirect: pathname,
-      }),
+      // search: stringify({
+      //   redirect: pathname,
+      // }),
     });
   }
 };
@@ -41,9 +46,8 @@ const AvatarDropdown = () => {
       if (key === 'logout' && initialState) {
         setInitialState({ ...initialState, currentUser: undefined });
         loginOut();
-        return;
       }
-      history.push(`/account/${key}`);
+      // history.push(`/account/${key}`);
     },
     [],
   );
