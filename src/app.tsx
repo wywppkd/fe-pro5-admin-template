@@ -112,6 +112,7 @@ const errorHandler = (error: ResponseError) => {
     // 状态码2xx & success:false: 也就是业务处理失败
     const errmsg = data.errmsg || data.errMsg || '未知的业务处理错误'; // 兼容历史接口: 驼峰 or 全小写
     const errcode = data.errcode || data.errCode || '未知'; // 兼容历史接口: 驼峰 or 全小写
+    // TODO: 请确认登录过期的 errcode
     if (errcode === 10110002) {
       // 10110002: 登录过期, token无效等表示需要重新登录
       removeToken();

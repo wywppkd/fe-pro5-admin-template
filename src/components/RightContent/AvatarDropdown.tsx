@@ -15,7 +15,7 @@ const loginOut = async () => {
   try {
     await outLogin();
   } catch (error) {
-    console.log('🚀 ~ file: AvatarDropdown.tsx ~ line 27 ~ loginOut ~ error', error);
+    // console.log('🚀 ~ file: AvatarDropdown.tsx ~ line 27 ~ loginOut ~ error', error);
   }
 
   const { query } = history.location;
