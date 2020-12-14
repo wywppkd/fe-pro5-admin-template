@@ -87,4 +87,65 @@
 
 ## 待完善
 
-- 该模板只考虑了反向代理解决跨域问题, 如果要使用 CORS, 并且想要根据环境变量设置 umi-request 的 prefix, 解决思路 [umi 多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE)
+- 该模板只考虑了反向代理解决跨域问题, 如果要使用 CORS, 并且想要根据环境变量设置 umi-request 的 prefix, 解决思路 [umi 多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE).
+
+## 目录
+
+```bash
+├── config
+│   ├── config.ts # umi 配置文件
+│   ├── defaultSettings.ts # 默认配置: 标题, logo, 主题...
+│   ├── proxy.ts # 本地开发配置反向代理
+│   └── routes.ts # 路由,菜单配置
+├── public
+│   ├── favicon.ico
+│   ├── home_bg.png
+│   └── logo.png
+├── src
+│   ├── access.ts # 返回权限对象
+│   ├── app.tsx # 运行时配置: 应用初始数据, layout, umi-request
+│   ├── components # 公共组件
+│   │   ├── Footer
+│   │   │   └── index.tsx
+│   │   ├── HeaderDropdown
+│   │   │   ├── index.less
+│   │   │   └── index.tsx
+│   │   └── RightContent
+│   │       ├── AvatarDropdown.tsx
+│   │       ├── index.less
+│   │       └── index.tsx
+│   ├── global.less # 全局样式
+│   ├── global.tsx
+│   ├── pages # 页面组件
+│   │   ├── 404.tsx
+│   │   ├── Admin.tsx
+│   │   ├── ListTableList
+│   │   │   ├── components # 当前页面组件的子组件
+│   │   │   │   ├── CreateForm.tsx
+│   │   │   │   └── UpdateForm.tsx
+│   │   │   ├── data.d.ts # 当前组件的 ts 类型
+│   │   │   ├── index.tsx
+│   │   │   └── service.ts # 当前组件的接口请求方法
+│   │   ├── MyList
+│   │   │   ├── data.d.ts
+│   │   │   ├── index.tsx
+│   │   │   └── service.ts
+│   │   ├── Welcome.tsx
+│   │   ├── document.ejs # 相当于 index.html
+│   │   └── user
+│   │       └── login # 登录页面
+│   │           ├── index.less
+│   │           └── index.tsx
+│   ├── services # 公用的接口请求方法
+│   │   ├── API.d.ts # 公用的 ts 类型
+│   │   ├── login.ts # 登录相关接口
+│   │   └── user.ts # 用户信息相关接口
+│   ├── typings.d.ts
+│   └── utils
+│       ├── auth.ts # 操作 token 的方法(默认存储在 cookie 中, 为了实现子域名直接共享登录状态, 可修改为 localStorage)
+│       ├── permissionMap.ts # 当前应用涉及的权限码
+│       ├── request.ts # 再次封装 umi-reuqest, 暴露 get, post, put...方法
+│       ├── utils.less
+│       └── utils.ts
+└── tsconfig.json
+```
