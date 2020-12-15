@@ -1,14 +1,7 @@
 # 介绍
 
 - 该项目模板是基于 Ant Design Pro v5 二次开发的
-  - 登录鉴权: 登录成功后将 token 存储到 cookie 中, 使用 token 换取当前用户信息(id,name,权限码...), 前端根据 `tokenc + 用户信息` 判断用户已登录
-    - 每次页面跳转根据 `token + 用户信息` 确认当前用户为登录状态, 未登录则清除`token + 用户信息`跳登录页
-    - 每次请求接口, 统一判断接口响应数据中的 errcode, 如果是 xxx 代表登录过期, 清除`token + 用户信息`跳登录页
-    - 涉及代码逻辑: `src/app.tsx`, `src/pages/user/login`, 
-  - 权限管理(菜单渲染, 路由控制, 页面展示)
-  - umi-request 二次封装
-  - 去掉菜单国际化配置
-
+  
 ## 相关文档
 
 - Ant Design Pro v5 :https://beta-pro.ant.design/docs/getting-started-cn
@@ -16,7 +9,58 @@
 - UmiJS@3x 插件: https://umijs.org/zh-CN/plugins/api
 - ProComponents 重型组件: https://procomponents.ant.design/components
 
-## umi-request 二次封装
+## 在 Ant Design Pro v5 基础上做了哪些事情
+
+### 登录鉴权: 
+
+> 当用户未登录时, 删除`token + currentUser(用户信息)`, 跳转登录页
+
+- 用户输入账号密码登录成功, 换取 `token`, 将 `token` 存储到 cookie 中: `src/pages/user/login/index.tsx`
+- 登录成功后, 通过`token`换取用户信息 `currentUser` (id,name,权限码...), 将信息存储到`initialState`中: `src/pages/user/login/index.tsx`
+- 这三种情况下会对用户登录状态进行鉴定:
+  - 页面跳转时, 根据`token + currentUser` 判断用户登录状态: `src/app.tsx` 的 `onPageChange`
+  - 请求接口时, 根据接口响应数据`success + errcode` 判断登录是否过期: `src/app.tsx` 的 `errorHandler`
+  - 刷新页面时(或直接进入系统非登录页), 通过 `token` 换取用户信息, 如果失败则表示登录过期: `src/app.tsx` 的 `fetchUserInfo`
+
+### 权限管理(菜单渲染, 路由控制, 页面展示)
+
+> https://beta-pro.ant.design/docs/authority-management-cn
+
+- 当前系统用到的权限码: `src/utils/permissionMap.ts`
+- 根据当前用户的权限码 `permissionCodeList` 与系统权限码`permissionMap.ts`比对, 筛选出当前用户的权限: `src/access.ts`
+- 路由/菜单权限控制
+
+```js
+// config/routes.ts
+{
+  name: '查询表格',
+  icon: 'table',
+  path: '/list',
+  access: permissionMap.table,// 表示只有拥有该权限的用户才能访问当前路由地址
+  component: './ListTableList',
+},
+```
+
+- 页面元素权限控制
+
+```js
+// 组件.tsx 
+import { Access, useAccess } from 'umi';
+
+const access = useAccess();// 类似: {index: true, index_item: true, table: true}
+if (access.index_item) {
+  // 只有拥有 index_item 权限的用户才能执行这里的逻辑
+  console.log(access.index_item);
+}
+
+<Access accessible={access.index_item} fallback={<div>您没有权限看到这些内容</div>}>
+  拥有指定权限的用户才能看到这条内容
+</Access>
+```
+
+### 去掉菜单国际化配置
+
+### umi-request 二次封装
 
 > 针对 `接口异常, 业务处理失败, 没有响应信息` 这三种情况进行了统一的错误处理 `src/app.tsx` 的 `errorHandler`
 
@@ -143,7 +187,7 @@
 │   │   └── user.ts # 用户信息相关接口
 │   ├── typings.d.ts
 │   └── utils
-│       ├── auth.ts # 操作 token 的方法(默认存储在 cookie 中, 为了实现子域名直接共享登录状态, 可修改为 localStorage)
+│       ├── auth.ts # 管理 token 的方法(默认存储在 cookie 中, 为了实现子域名之间共享登录状态, 可改为 localStorage)
 │       ├── permissionMap.ts # 当前应用涉及的权限码
 │       ├── request.ts # 再次封装 umi-reuqest, 暴露 get, post, put...方法
 │       ├── utils.less
