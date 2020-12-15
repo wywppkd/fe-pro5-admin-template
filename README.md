@@ -11,9 +11,14 @@
 
 ## 在 Ant Design Pro v5 基础上做了哪些事情
 
+- 去掉菜单国际化配置
+- 登录&鉴权
+- 权限管理
+- umi-request 二次封装
+
 ### 登录鉴权: 
 
-> 当用户未登录时, 删除`token + currentUser(用户信息)`, 跳转登录页
+> 当检测用户未登录或登录失效时, 删除`token + currentUser(用户信息)`, 跳转登录页
 
 - 用户输入账号密码登录成功, 换取 `token`, 将 `token` 存储到 cookie 中: `src/pages/user/login/index.tsx`
 - 登录成功后, 通过`token`换取用户信息 `currentUser` (id,name,权限码...), 将信息存储到`initialState`中: `src/pages/user/login/index.tsx`
@@ -22,7 +27,7 @@
   - 请求接口时, 根据接口响应数据`success + errcode` 判断登录是否过期: `src/app.tsx` 的 `errorHandler`
   - 刷新页面时(或直接进入系统非登录页), 通过 `token` 换取用户信息, 如果失败则表示登录过期: `src/app.tsx` 的 `fetchUserInfo`
 
-### 权限管理(菜单渲染, 路由控制, 页面展示)
+### 权限管理(菜单渲染, 路由控制, 页面元素)
 
 > https://beta-pro.ant.design/docs/authority-management-cn
 
@@ -58,17 +63,16 @@ if (access.index_item) {
 </Access>
 ```
 
-### 去掉菜单国际化配置
-
 ### umi-request 二次封装
 
-> 针对 `接口异常, 业务处理失败, 没有响应信息` 这三种情况进行了统一的错误处理 `src/app.tsx` 的 `errorHandler`
+- 统一设置`Authorization`: `src/app.tsx` 的 `requestInterceptors`
+- 错误异常统一处理: `src/app.tsx` 的 `errorHandler`
+  - http status 非 2xx: notification 错误提示
+  - http status 2xx, success 为 false: message 错误提示
+  - 请求初始化时出错或者没有响应返回的异常: notification 提示网络异常
+- 封装`umi-request`请求方法, 暴露`get,post,put...`方法, 方便使用: `src/utils/request.ts`
 
-- http status 非 2xx: notification 错误提示
-- http status 2xx, success 为 false: message 错误提示
-- 请求初始化时出错或者没有响应返回的异常: notification 提示网络异常
-
-## 准备开发
+## 快速开始
 
 - 推荐工具: VSCode + Prettier-Code formatter(VSCode插件) -> 保存时自动格式化
 - 全局搜索 "TODO", 确认可能需要修改的地方
@@ -123,7 +127,7 @@ if (access.index_item) {
 }
 ```
 
-- 退出登录 `/api/user/logout`
+- 退出登录接口 `/api/user/logout`
 
 ```js
 {
@@ -169,7 +173,7 @@ if (access.index_item) {
 │   │   │   │   ├── CreateForm.tsx
 │   │   │   │   └── UpdateForm.tsx
 │   │   │   ├── data.d.ts # 当前组件的 ts 类型
-│   │   │   ├── index.tsx
+│   │   │   ├── index.tsx # 页面组件
 │   │   │   └── service.ts # 当前组件的接口请求方法
 │   │   ├── MyList
 │   │   │   ├── data.d.ts
@@ -197,4 +201,4 @@ if (access.index_item) {
 
 ## 待完善
 
-- 该模板只考虑了反向代理解决跨域问题, 如果要使用 CORS, 并且想要根据环境变量设置 umi-request 的 prefix, 解决思路 [umi 多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE)
+- 如果要使用 CORS 解决跨域问题, 并且想要根据环境变量设置 umi-request 的 prefix, 解决思路 [umi 多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE)

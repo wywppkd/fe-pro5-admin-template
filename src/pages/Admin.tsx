@@ -1,14 +1,14 @@
 import React from 'react';
 import { HeartTwoTone, SmileTwoTone } from '@ant-design/icons';
-import { Card, Typography, Alert } from 'antd';
+import { Card, Typography, Alert, Button } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
 import { Access, useAccess } from 'umi';
 
 export default (): React.ReactNode => {
   const access = useAccess();
   if (access.index_item) {
+    console.log('🚀 ~ file: Admin.tsx ~ line 10 ~ access', access);
     // 只有拥有 index_item 权限的用户才能执行这里的逻辑
-    console.log(access.index_item);
   }
 
   return (
@@ -24,13 +24,12 @@ export default (): React.ReactNode => {
             marginBottom: 48,
           }}
         />
-        <Typography.Title level={2} style={{ textAlign: 'center' }}>
-          <SmileTwoTone /> Ant Design Pro <HeartTwoTone twoToneColor="#eb2f96" /> You
-        </Typography.Title>
+        <Access accessible={access.index_item_love} fallback={<div>您没有权限看到某些内容</div>}>
+          <Typography.Title level={2} style={{ textAlign: 'center' }}>
+            <SmileTwoTone /> Ant Design Pro <HeartTwoTone twoToneColor="#eb2f96" /> You
+          </Typography.Title>
+        </Access>
       </Card>
-      <Access accessible={access.index_item} fallback={<div>您没有权限看到这些内容</div>}>
-        拥有指定权限的用户才能看到这条内容
-      </Access>
     </PageContainer>
   );
 };
