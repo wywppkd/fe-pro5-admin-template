@@ -8,7 +8,7 @@
 export default {
   dev: {
     '/api/': {
-      target: 'http://rap2api.taobao.org/app/mock/230933', // TODO: 请求的接口地址
+      target: 'http://rap2api.taobao.org/app/mock/230933', // TODO: 本地开发时, 请求的接口地址
       changeOrigin: true,
       // pathRewrite: { '^': '' },
     },
