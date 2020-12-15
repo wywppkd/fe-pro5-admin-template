@@ -4,7 +4,7 @@
   
 ## 相关文档
 
-- Ant Design Pro v5 :https://beta-pro.ant.design/docs/getting-started-cn
+- Ant Design Pro v5: https://beta-pro.ant.design/docs/getting-started-cn
 - UmiJS@3x: https://umijs.org/zh-CN/docs
 - UmiJS@3x 插件: https://umijs.org/zh-CN/plugins/api
 - ProComponents 重型组件: https://procomponents.ant.design/components
@@ -30,6 +30,7 @@
 ### 权限管理(菜单渲染, 路由控制, 页面元素)
 
 > https://beta-pro.ant.design/docs/authority-management-cn
+> https://umijs.org/zh-CN/plugins/plugin-access
 
 - 当前系统用到的权限码: `src/utils/permissionMap.ts`
 - 根据当前用户的权限码 `permissionCodeList` 与系统权限码`permissionMap.ts`比对, 筛选出当前用户的权限: `src/access.ts`
@@ -37,6 +38,8 @@
 
 ```js
 // config/routes.ts
+import permissionMap from '../src/utils/permissionMap';
+
 {
   name: '查询表格',
   icon: 'table',
@@ -44,23 +47,6 @@
   access: permissionMap.table,// 表示只有拥有该权限的用户才能访问当前路由地址
   component: './ListTableList',
 },
-```
-
-- 页面元素权限控制
-
-```js
-// 组件.tsx 
-import { Access, useAccess } from 'umi';
-
-const access = useAccess();// 类似: {index: true, index_item: true, table: true}
-if (access.index_item) {
-  // 只有拥有 index_item 权限的用户才能执行这里的逻辑
-  console.log(access.index_item);
-}
-
-<Access accessible={access.index_item} fallback={<div>您没有权限看到这些内容</div>}>
-  拥有指定权限的用户才能看到这条内容
-</Access>
 ```
 
 ### umi-request 二次封装
@@ -168,7 +154,7 @@ if (access.index_item) {
 │   ├── pages # 页面组件
 │   │   ├── 404.tsx
 │   │   ├── Admin.tsx
-│   │   ├── ListTableList
+│   │   ├── ListTableList # 查询表格页
 │   │   │   ├── components # 当前页面组件的子组件
 │   │   │   │   ├── CreateForm.tsx
 │   │   │   │   └── UpdateForm.tsx
@@ -182,7 +168,7 @@ if (access.index_item) {
 │   │   ├── Welcome.tsx
 │   │   ├── document.ejs # 相当于 index.html
 │   │   └── user
-│   │       └── login # 登录页面
+│   │       └── login # 登录页
 │   │           ├── index.less
 │   │           └── index.tsx
 │   ├── services # 公用的接口请求方法
