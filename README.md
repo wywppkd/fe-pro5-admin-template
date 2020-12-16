@@ -11,12 +11,12 @@
 
 ## 在 Ant Design Pro v5 基础上做了哪些事情
 
-- 去掉菜单国际化配置
 - 登录&鉴权
-- 权限管理
+- 权限管理(菜单渲染, 路由控制, 页面元素)
 - umi-request 二次封装
+- 去掉菜单国际化配置
 
-### 登录鉴权: 
+### 登录&鉴权
 
 > 当检测用户未登录或登录失效时, 删除`token + currentUser(用户信息)`, 跳转登录页
 
@@ -123,6 +123,12 @@ import permissionMap from '../src/utils/permissionMap';
   "data": null
 }
 ```
+
+### 开发新页面
+
+1. 新建文件: `src/pages/*`
+2. 配置路由: `config/routes.ts`
+3. 如果需要权限控制, 添加权限码`src/utils/permissionMap.ts`, 在路由中配置对应的 `access`
 
 ## 目录
 
