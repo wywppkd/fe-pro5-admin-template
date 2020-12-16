@@ -1,22 +1,22 @@
-# 介绍
+# 1. 介绍
 
 - 该项目模板是基于 Ant Design Pro v5 二次开发的
   
-## 相关文档
+## 1.1. 相关文档
 
 - Ant Design Pro v5: https://beta-pro.ant.design/docs/getting-started-cn
 - UmiJS@3x: https://umijs.org/zh-CN/docs
 - UmiJS@3x 插件: https://umijs.org/zh-CN/plugins/api
 - ProComponents 重型组件: https://procomponents.ant.design/components
 
-## 在 Ant Design Pro v5 基础上做了哪些事情
+## 1.2. 在 Ant Design Pro v5 基础上做了哪些事情
 
 - 登录&鉴权
 - 权限管理(菜单渲染, 路由控制, 页面元素)
 - umi-request 二次封装
 - 去掉菜单国际化配置
 
-### 登录&鉴权
+### 1.2.1. 登录&鉴权
 
 > 当检测用户未登录或登录失效时, 删除`token + currentUser(用户信息)`, 跳转登录页
 
@@ -28,7 +28,7 @@
   - 请求接口时, 根据接口响应数据`success + errcode` 判断登录是否过期: `src/app.tsx` 的 `errorHandler`
   - 刷新页面时(或直接进入系统非登录页), 通过 `token` 换取用户信息, 如果失败则表示登录过期: `src/app.tsx` 的 `fetchUserInfo`
 
-### 权限管理(菜单渲染, 路由控制, 页面元素)
+### 1.2.2. 权限管理(菜单渲染, 路由控制, 页面元素)
 
 - 系统权限码: `src/utils/permissionMap.ts`
 - 从用户信息 `currentUser` 中拿到当前用户的权限码 `permissionCodeList` 与系统权限码比对, 筛选出当前用户的权限: `src/access.ts`
@@ -36,7 +36,7 @@
   - https://beta-pro.ant.design/docs/authority-management-cn
   - https://umijs.org/zh-CN/plugins/plugin-access
 
-### umi-request 二次封装
+### 1.2.3. umi-request 二次封装
 
 - 统一设置`Authorization`: `src/app.tsx` 的 `requestInterceptors`
 - 错误异常统一处理: `src/app.tsx` 的 `errorHandler`
@@ -45,12 +45,12 @@
   - 请求初始化时出错或者没有响应返回的异常: notification 提示网络异常
 - 封装`umi-request`请求方法, 暴露`get,post,put...`方法, 方便使用: `src/utils/request.ts`
 
-## 快速开始
+## 1.3. 快速开始
 
 - 推荐工具: VSCode + Prettier-Code formatter(VSCode插件) -> 保存时自动格式化
 - 全局搜索 "TODO", 确认可能需要修改的地方
 
-### 确认实际接口与当前项目接口是否一致
+### 1.3.1. 确认实际接口与当前项目接口是否一致
 
 > 不一致则根据实际接口修改对应代码
 
@@ -111,13 +111,13 @@
 }
 ```
 
-### 开发新页面
+### 1.3.2. 开发新页面
 
 1. 新建文件: `src/pages/*`
 2. 配置路由: `config/routes.ts`
 3. 如果需要权限控制, 添加权限码`src/utils/permissionMap.ts`, 在路由中配置对应的 `access`
 
-## 目录
+## 1.4. 目录
 
 ```bash
 ├── config
@@ -179,6 +179,6 @@
 └── tsconfig.json
 ```
 
-## 待完善
+## 1.5. 待完善
 
 - 如果使用了 CORS 解决跨域问题, 并且想要根据环境变量设置 umi-request 的 prefix, 解决思路 [umi 多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE)
