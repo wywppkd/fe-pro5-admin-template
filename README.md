@@ -20,8 +20,9 @@
 
 > 当检测用户未登录或登录失效时, 删除`token + currentUser(用户信息)`, 跳转登录页
 
-- 用户输入账号密码登录成功, 换取 `token`, 将 `token` 存储到 cookie 中: `src/pages/user/login/index.tsx`
-- 登录成功后, 通过`token`换取用户信息 `currentUser` (id,name,权限码...), 将信息存储到`initialState`中: `src/pages/user/login/index.tsx`
+- 用户输入账号密码登录成功, 获得 `token`, 将 `token` 存储到 cookie 中: `src/pages/user/login/index.tsx`
+  - 之后所有请求的请求头都会带上`Authorization: ${token}`
+- 登录成功后, 通过`token`换取用户信息 `currentUser` (id,name,permissionCodeList...), 将信息存储到`initialState`中: `src/pages/user/login/index.tsx`
 - 这三种情况下会对用户登录状态进行鉴定:
   - 页面跳转时, 根据`token + currentUser` 判断用户登录状态: `src/app.tsx` 的 `onPageChange`
   - 请求接口时, 根据接口响应数据`success + errcode` 判断登录是否过期: `src/app.tsx` 的 `errorHandler`
@@ -29,25 +30,11 @@
 
 ### 权限管理(菜单渲染, 路由控制, 页面元素)
 
-> https://beta-pro.ant.design/docs/authority-management-cn
-> https://umijs.org/zh-CN/plugins/plugin-access
-
-- 当前系统用到的权限码: `src/utils/permissionMap.ts`
-- 根据当前用户的权限码 `permissionCodeList` 与系统权限码`permissionMap.ts`比对, 筛选出当前用户的权限: `src/access.ts`
-- 路由/菜单权限控制
-
-```js
-// config/routes.ts
-import permissionMap from '../src/utils/permissionMap';
-
-{
-  name: '查询表格',
-  icon: 'table',
-  path: '/list',
-  access: permissionMap.table,// 表示只有拥有该权限的用户才能访问当前路由地址
-  component: './ListTableList',
-},
-```
+- 系统权限码: `src/utils/permissionMap.ts`
+- 从用户信息 `currentUser` 中拿到当前用户的权限码 `permissionCodeList` 与系统权限码比对, 筛选出当前用户的权限: `src/access.ts`
+- 使用权限码控制菜单,路由,页面元素, 见官方文档: 
+  - https://beta-pro.ant.design/docs/authority-management-cn
+  - https://umijs.org/zh-CN/plugins/plugin-access
 
 ### umi-request 二次封装
 
@@ -186,6 +173,7 @@ import permissionMap from '../src/utils/permissionMap';
 │       ├── auth.ts # 管理 token 的方法(默认存储在 cookie 中, 为了实现子域名之间共享登录状态, 可改为 localStorage)
 │       ├── permissionMap.ts # 当前应用涉及的权限码
 │       ├── request.ts # 再次封装 umi-reuqest, 暴露 get, post, put...方法
+│       ├── sleep.ts # 暂停函数
 │       ├── utils.less
 │       └── utils.ts
 └── tsconfig.json
@@ -193,4 +181,4 @@ import permissionMap from '../src/utils/permissionMap';
 
 ## 待完善
 
-- 如果要使用 CORS 解决跨域问题, 并且想要根据环境变量设置 umi-request 的 prefix, 解决思路 [umi 多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE)
+- 如果使用了 CORS 解决跨域问题, 并且想要根据环境变量设置 umi-request 的 prefix, 解决思路 [umi 多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE)
