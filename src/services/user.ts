@@ -1,13 +1,8 @@
-import { request } from 'umi';
+import request from '@/utils/request';
 
-export async function query() {
-  return request<API.CurrentUser[]>('/api/users');
-}
-
-export async function queryCurrent() {
-  return request<API.CurrentUser>('/api/currentUser');
-}
-
-export async function queryNotices(): Promise<any> {
-  return request<{ data: API.NoticeIconData[] }>('/api/notices');
+/** 查询用户信息: 用户ID, 用户名, 权限码... */
+export async function queryCurrent(): Promise<API.BaseType<API.UserInfoType>> {
+  return request.get({
+    url: '/api/user/getInfo',
+  });
 }

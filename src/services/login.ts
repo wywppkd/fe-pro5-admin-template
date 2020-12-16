@@ -1,24 +1,16 @@
-import { request } from 'umi';
+import request from '@/utils/request';
 
-export interface LoginParamsType {
-  username: string;
-  password: string;
-  mobile: string;
-  captcha: string;
-  type: string;
-}
-
-export async function fakeAccountLogin(params: LoginParamsType) {
-  return request<API.LoginStateType>('/api/login/account', {
-    method: 'POST',
-    data: params,
+/** 登录 */
+export async function accountLogin(
+  data: API.LoginParamsType,
+): Promise<API.BaseType<API.LoginResType>> {
+  return request.post({
+    url: '/api/user/login',
+    data,
   });
 }
 
-export async function getFakeCaptcha(mobile: string) {
-  return request(`/api/login/captcha?mobile=${mobile}`);
-}
-
+/** 退出登录 */
 export async function outLogin() {
-  return request('/api/login/outLogin');
+  return request.post({ url: '/api/user/logout' });
 }

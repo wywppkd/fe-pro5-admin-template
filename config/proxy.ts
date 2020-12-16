@@ -8,23 +8,16 @@
 export default {
   dev: {
     '/api/': {
-      target: 'https://preview.pro.ant.design',
+      target: 'http://rap2api.taobao.org/app/mock/230933', // TODO: 本地开发时, 请求的接口地址
       changeOrigin: true,
-      pathRewrite: { '^': '' },
+      // pathRewrite: { '^': '' },
     },
   },
-  test: {
-    '/api/': {
-      target: 'https://preview.pro.ant.design',
-      changeOrigin: true,
-      pathRewrite: { '^': '' },
-    },
-  },
-  pre: {
-    '/api/': {
-      target: 'your pre url',
-      changeOrigin: true,
-      pathRewrite: { '^': '' },
-    },
-  },
+  // pre: {
+  //   '/api/': {
+  //     target: 'http://rap2api.taobao.org/app/mock/230933',
+  //     changeOrigin: true,
+  //     // pathRewrite: { '^': '' },
+  //   },
+  // },
 };

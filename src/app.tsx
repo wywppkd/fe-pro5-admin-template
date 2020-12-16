@@ -1,12 +1,13 @@
 import React from 'react';
 import { BasicLayoutProps, Settings as LayoutSettings, PageLoading } from '@ant-design/pro-layout';
-import { notification } from 'antd';
+import { message, notification } from 'antd';
 import { history, RequestConfig } from 'umi';
 import RightContent from '@/components/RightContent';
 import Footer from '@/components/Footer';
 import { ResponseError } from 'umi-request';
 import { queryCurrent } from './services/user';
 import defaultSettings from '../config/defaultSettings';
+import { getToken, removeToken } from './utils/auth';
 
 /**
  * 获取用户信息比较慢的时候会展示一个 loading
@@ -15,21 +16,24 @@ export const initialStateConfig = {
   loading: <PageLoading />,
 };
 
+/** getInitialState 会在整个应用最开始时执行 */
 export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
-  currentUser?: API.CurrentUser;
-  fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
+  currentUser?: API.UserInfoType;
+  fetchUserInfo?: () => Promise<API.UserInfoType | undefined>;
 }> {
+  /** 获取用户信息 */
   const fetchUserInfo = async () => {
     try {
       const currentUser = await queryCurrent();
-      return currentUser;
+      return currentUser.data;
     } catch (error) {
+      removeToken();
       history.push('/user/login');
     }
     return undefined;
   };
-  // 如果是登录页面，不执行
+  // 进入应用, 判断是非登录页, 则获取用户信息
   if (history.location.pathname !== '/user/login') {
     const currentUser = await fetchUserInfo();
     return {
@@ -47,7 +51,7 @@ export async function getInitialState(): Promise<{
 export const layout = ({
   initialState,
 }: {
-  initialState: { settings?: LayoutSettings; currentUser?: API.CurrentUser };
+  initialState: { settings?: LayoutSettings; currentUser?: API.UserInfoType };
 }): BasicLayoutProps & {
   childrenRender?: (dom: JSX.Element) => React.ReactNode;
 } => {
@@ -55,11 +59,13 @@ export const layout = ({
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     footerRender: () => <Footer />,
-    onPageChange: () => {
+    onPageChange: async () => {
       const { currentUser } = initialState;
       const { location } = history;
-      // 如果没有登录，重定向到 login
-      if (!currentUser && location.pathname !== '/user/login') {
+      const token = getToken();
+      // 判断登录状态(无token或者无currentUser)
+      if ((!token || !currentUser) && location.pathname !== '/user/login') {
+        removeToken();
         history.push('/user/login');
       }
     },
@@ -88,11 +94,13 @@ const codeMessage = {
 };
 
 /**
- * 异常处理程序
+ * 统一进行异常处理
+ * 什么情况会进入该异常处理: 状态码非2xx | success:false | 请求没发出去或没有响应信息
  */
 const errorHandler = (error: ResponseError) => {
-  const { response } = error;
+  const { response, data } = error;
   if (response && response.status) {
+    // 状态码非 2xx 的响应: 也就是业务处理异常
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
 
@@ -100,9 +108,22 @@ const errorHandler = (error: ResponseError) => {
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
     });
-  }
-
-  if (!response) {
+  } else if (data) {
+    // 状态码2xx & success:false: 也就是业务处理失败
+    const errmsg = data.errmsg || data.errMsg || '未知的业务处理错误'; // 兼容历史接口: 驼峰 or 全小写
+    const errcode = data.errcode || data.errCode || '未知'; // 兼容历史接口: 驼峰 or 全小写
+    // TODO: 请确认登录过期的 errcode
+    if (errcode === 10110002) {
+      // 10110002: 登录过期, token无效等表示需要重新登录
+      removeToken();
+      message.error('你的登录已失效, 请重新登录');
+      history.push('/user/login');
+    } else {
+      // 其他错误码统一提示
+      message.error(`${errmsg}(错误码:${errcode})`);
+    }
+  } else {
+    // 请求发出前出错或没有响应
     notification.error({
       description: '您的网络发生异常，无法连接服务器',
       message: '网络异常',
@@ -113,4 +134,18 @@ const errorHandler = (error: ResponseError) => {
 
 export const request: RequestConfig = {
   errorHandler,
+  // 请求拦截器: 请求头增加 token
+  requestInterceptors: [
+    (url, options) => {
+      const tmpOptions = options;
+      const token = getToken();
+      if (token) {
+        tmpOptions.headers = { ...options.headers, Authorization: token };
+      }
+      return {
+        options: tmpOptions,
+        url,
+      };
+    },
+  ],
 };

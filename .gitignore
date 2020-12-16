@@ -8,7 +8,7 @@ _roadhog-api-doc
 
 # production
 /dist
-/.vscode
+# /.vscode
 
 # misc
 .DS_Store
@@ -18,9 +18,9 @@ yarn-error.log
 /coverage
 .idea
 yarn.lock
-package-lock.json
+# package-lock.json
 *bak
-.vscode
+# .vscode
 
 # visual studio code
 .history
