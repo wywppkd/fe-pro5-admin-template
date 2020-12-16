@@ -5,7 +5,7 @@ export default function access(initialState: { currentUser?: API.UserInfoType | 
   const { currentUser } = initialState || {};
   /** 服务端返回的当前用户权限码 */
   const permissionCodeList = currentUser?.permissionCodeList || [];
-  /** 当前用户拥有当前系统的哪些权限: 用户权限码对比当前系统权限码 */
+  /** 用户权限码与当前系统权限码进行比对 => 获得当前用户拥有当前系统的权限列表 */
   const accessMap: { [propName: string]: boolean } = {};
   Object.keys(permissionMap).forEach((item) => {
     if (permissionCodeList.includes(item)) {
