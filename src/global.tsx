@@ -2,7 +2,13 @@ import { Button, message, notification } from 'antd';
 
 import React from 'react';
 import { useIntl } from 'umi';
+import moment from 'moment';
+import 'moment/locale/zh-cn';
 import defaultSettings from '../config/defaultSettings';
+
+// moment 全局配置
+moment.locale('zh-cn');
+moment.defaultFormat = 'YYYY-MM-DD HH:mm:ss'; // 设置 format() 默认格式
 
 const { pwa } = defaultSettings;
 const isHttps = document.location.protocol === 'https:';

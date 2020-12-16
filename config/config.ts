@@ -57,7 +57,7 @@ export default defineConfig({
   history: {
     type: 'browser',
   },
-  exportStatic: {},
+  // exportStatic: {},
   mock: false,
   // 路由前缀
   base: '/', // TODO, 当网站根路径是 https://www.baidu.com/app/ 时, 设置为 /app/
