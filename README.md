@@ -1,7 +1,7 @@
 # 介绍
 
 - 该项目模板是基于 Ant Design Pro v5 二次开发的
-  
+
 ## 1. 相关文档
 
 - Ant Design Pro v5: https://beta-pro.ant.design/docs/getting-started-cn
@@ -32,7 +32,7 @@
 
 - 系统权限码: `src/utils/permissionMap.ts`
 - 从用户信息 `currentUser` 中拿到当前用户的权限码 `permissionCodeList` 与系统权限码比对, 筛选出当前用户的权限: `src/access.ts`
-- 使用权限码控制菜单,路由,页面元素, 见官方文档: 
+- 使用权限码控制菜单,路由,页面元素, 见官方文档:
   - https://beta-pro.ant.design/docs/authority-management-cn
   - https://umijs.org/zh-CN/plugins/plugin-access
 
@@ -47,7 +47,13 @@
 
 ## 3. 快速开始
 
-- 推荐工具: VSCode + Prettier-Code formatter(VSCode插件) -> 保存时自动格式化
+```bash
+$ npm i
+$ npm start # 本地启动
+$ npm run build # 生产打包
+```
+
+- 推荐工具: VSCode + Prettier-Code formatter(VSCode 插件) -> 保存时自动格式化
 - 全局搜索 "TODO", 确认可能需要修改的地方
 
 ### 3.1. 确认实际接口与当前项目接口是否一致
@@ -117,6 +123,13 @@
 2. 配置路由: `config/routes.ts`
 3. 如果需要权限控制, 添加权限码`src/utils/permissionMap.ts`, 在路由中配置对应的 `access`
 
+### 3.3 定义请求方法和 ts 类型的位置
+
+- 定义公共请求方法 `src/services/xxx.ts`
+- 定义页面独有请求方法 `src/pages/xxx/services.ts`
+- 定义公共的 ts 类型 `src/services/API.d.ts`
+- 定义页面独有的 ts 类型 `src/pages/xxx/data.d.ts`
+
 ## 4. 目录
 
 ```bash
@@ -151,26 +164,26 @@
 │   │   │   ├── components # 当前页面组件的子组件
 │   │   │   │   ├── CreateForm.tsx
 │   │   │   │   └── UpdateForm.tsx
-│   │   │   ├── data.d.ts # 当前组件的 ts 类型
+│   │   │   ├── data.d.ts # 当前组件的 ts 类型(公共 ts 类型可以放在 src/services/API.d.ts)
 │   │   │   ├── index.tsx # 页面组件
-│   │   │   └── service.ts # 当前组件的接口请求方法
+│   │   │   └── service.ts # 当前组件的接口请求方法(公共请求方法可以放在 src/services/xxx.ts)
 │   │   ├── MyList
 │   │   │   ├── data.d.ts
 │   │   │   ├── index.tsx
 │   │   │   └── service.ts
-│   │   ├── Welcome.tsx
+│   │   ├── Welcome.tsx # 欢迎页
 │   │   ├── document.ejs # 相当于 index.html
 │   │   └── user
 │   │       └── login # 登录页
 │   │           ├── index.less
 │   │           └── index.tsx
-│   ├── services # 公用的接口请求方法
-│   │   ├── API.d.ts # 公用的 ts 类型
+│   ├── services # 公用的接口请求方法(页面独有请求方法可以放在 src/pages/xxx/services.ts)
+│   │   ├── API.d.ts # 公用的 ts 类型(页面独有 ts 类型定义可以放在 src/pages/xxx/data.d.ts)
 │   │   ├── login.ts # 登录相关接口
 │   │   └── user.ts # 用户信息相关接口
 │   ├── typings.d.ts
 │   └── utils
-│       ├── auth.ts # 管理 token 的方法(默认存储在 cookie 中, 为了实现子域名之间共享登录状态, 可改为 localStorage)
+│       ├── auth.ts # 管理 token 的方法(为了实现子域名之间共享登录状态默认存储在 cookie 中, 可改为 localStorage)
 │       ├── permissionMap.ts # 当前应用涉及的权限码
 │       ├── request.ts # 再次封装 umi-reuqest, 暴露 get, post, put...方法
 │       ├── sleep.ts # 暂停函数
