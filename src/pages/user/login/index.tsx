@@ -43,13 +43,11 @@ const Login: React.FC<{}> = () => {
     try {
       // 登录
       const msg = await accountLogin({ ...values });
-      if (msg.success) {
-        message.success('登录成功！');
-        setToken(msg.data.token);
-        await fetchUserInfo();
-        goto();
-        return;
-      }
+      message.success('登录成功！');
+      setToken(msg.data.token);
+      await fetchUserInfo();
+      goto();
+      return;
     } catch (error) {
       // message.error('登录失败，请重试！');
     }

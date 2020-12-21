@@ -134,6 +134,22 @@ const errorHandler = (error: ResponseError) => {
 
 export const request: RequestConfig = {
   errorHandler,
+  /**
+   * https://umijs.org/zh-CN/plugins/plugin-request
+   * 当后端接口不满足 plugin-request 规范的时候你需要通过该配置把后端接口数据转换为该格式
+   * 注意: 该配置只是用于错误处理，不会影响最终传递给页面的数据格式。
+   */
+  errorConfig: {
+    adaptor: (resData) => {
+      const errcode = typeof resData.errcode === 'number' ? resData.errcode : resData.errCode; // 兼容历史接口: 驼峰 or 全小写
+      const errmsg = resData.errmsg || resData.errMsg || '未知的业务处理错误'; // 兼容历史接口: 驼峰 or 全小写
+      return {
+        ...resData,
+        success: errcode === 0, // errcode:0 表示业务处理成功, 后端接口返回的 success 不准确
+        errorMessage: errmsg,
+      };
+    },
+  },
   // 请求拦截器: 请求头增加 token
   requestInterceptors: [
     (url, options) => {
