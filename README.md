@@ -67,7 +67,6 @@ $ npm run build # 生产打包
 ```bash
 # 提交代码前, 执行下面命令自动格式化 ts,js 和 less 文件, ps: 有些格式问题可能需要手动才能修复
 $ npm run lint:fix # eslint 修复 & stylelint 修复
-$ npm run lint:style # stylelint 修复
 ```
 
 ### 3.2. 确认实际接口与当前项目接口是否一致
