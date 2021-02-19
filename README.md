@@ -11,42 +11,46 @@
 
 ## 2. 在 Ant Design Pro v5 基础上做了哪些事情
 
-- 登录&鉴权
+- 登录 & 鉴权
 - 权限管理(菜单渲染, 路由控制, 页面元素)
 - umi-request 二次封装
 - 去掉菜单国际化配置
 - moment 全局配置 `src/global.ts`
 
-### 2.1. 登录&鉴权
+### 2.1. 登录 & 鉴权
 
-> 当检测用户未登录或登录失效时, 删除`token + currentUser(用户信息)`, 跳转登录页
+1. 用户输入账号密码登录成功, 接口返回 `token`, 将 `token` 存储到 cookie 中
 
-- 用户输入账号密码登录成功, 获得 `token`, 将 `token` 存储到 cookie 中: `src/pages/user/login/index.tsx`
-  - 之后所有请求的请求头都会带上`Authorization: ${token}`
-- 登录成功后, 通过`token`换取用户信息 `currentUser` (id,name,permissionCodeList...), 将信息存储到`initialState`中: `src/pages/user/login/index.tsx`
-- 这三种情况下会对用户登录状态进行鉴定:
-  - 页面跳转时, 根据`token + currentUser` 判断用户登录状态: `src/app.tsx` 的 `onPageChange`
-  - 请求接口时, 根据接口响应数据`success + errcode` 判断登录是否过期: `src/app.tsx` 的 `errorHandler`
-  - 刷新页面时(或直接进入系统非登录页), 通过 `token` 换取用户信息, 如果失败则表示登录过期: `src/app.tsx` 的 `fetchUserInfo`
+- 之后所有请求的请求头都会带上`Authorization: ${token}`
+
+1. 进入首页, 通过 `token` 换取用户信息 `currentUser` (id,name,permissionCodeList...), 将信息存储到`initialState`中
+1. 之后这三种情况下会对用户登录状态进行鉴定:
+
+- 页面跳转时, 根据`token + currentUser` 判断用户登录状态, 代码位置: `src/app.tsx` 的 `onPageChange`
+- 请求接口时, 根据接口响应数据`res.errcode` 判断登录是否过期, 代码位置: `src/app.tsx` 的 `errorHandler`
+- 刷新页面时(或直接进入系统非登录页), 通过 `token` 换取用户信息 `currentUser`, 如果失败则表示登录过期, 代码位置: `src/app.tsx` 的 `fetchUserInfo`
+
+1. 当用户退出登录/登录失效时, 删除`token + currentUser(用户信息)`, 跳转登录页
 
 ### 2.2. 权限管理(菜单渲染, 路由控制, 页面元素)
 
-- 系统权限码: `src/utils/permissionMap.ts`
-- 从用户信息 `currentUser` 中拿到当前用户的权限码 `permissionCodeList` 与系统权限码比对, 筛选出当前用户的权限: `src/access.ts`
-- 使用权限码控制菜单,路由,页面元素, 见官方文档:
-  - https://beta-pro.ant.design/docs/authority-management-cn
-  - https://umijs.org/zh-CN/plugins/plugin-access
+- 权限管理的逻辑使用了 pro5 官方提供的方案, 系统涉及的权限码统一放在了 `src/utils/permissionMap.ts`
+- pro5 权限管理: https://beta-pro.ant.design/docs/authority-management-cn
 
 ### 2.3. umi-request 二次封装
 
-- 统一设置`Authorization`: `src/app.tsx` 的 `requestInterceptors`
-- 错误异常统一处理: `src/app.tsx` 的 `errorHandler`
+- 统一设置请求头字段 `Authorization`, 代码位置: `src/app.tsx` 的 `requestInterceptors`
+- 错误异常统一处理, 代码位置: `src/app.tsx` 的 `errorHandler`
+
   - http status 非 2xx: notification 错误提示
   - http status 2xx, success 为 false: message 错误提示
   - 请求初始化时出错或者没有响应返回的异常: notification 提示网络异常
-- 封装`umi-request`请求方法, 暴露`get,post,put...`方法, 方便使用: `src/utils/request.ts`
+
+- 封装 `umi-request` 请求方法, 暴露`get,post,put...`方法, 方便使用: `src/utils/request.ts`
 
 ## 3. 快速开始
+
+- 全局搜索 "TODO", 确认可能需要修改的地方
 
 ```bash
 $ npm i
@@ -54,10 +58,19 @@ $ npm start # 本地启动
 $ npm run build # 生产打包
 ```
 
-- 推荐工具: VSCode + Prettier-Code formatter(VSCode 插件) -> 保存时自动格式化
-- 全局搜索 "TODO", 确认可能需要修改的地方
+### 3.1. 代码格式化
 
-### 3.1. 确认实际接口与当前项目接口是否一致
+- 编辑器: VSCode
+- 编辑器插件: Prettier-Code formatter(VSCode 插件) => 开启自动格式化(配合 `.vscode/settings.json`)
+- 编辑器插件: ESLint => 开启 ESLint 规则检测
+
+```bash
+# 提交代码前, 执行下面命令自动格式化 ts,js 和 less 文件, ps: 有些格式问题可能需要手动才能修复
+$ npm run lint:fix # eslint 修复 & stylelint 修复
+$ npm run lint:style # stylelint 修复
+```
+
+### 3.2. 确认实际接口与当前项目接口是否一致
 
 > 不一致则根据实际接口修改对应代码
 
@@ -72,9 +85,8 @@ $ npm run build # 生产打包
 
 // 响应数据
 {
-  "errcode": 119,// 错误码
+  "errcode": 0,// 错误码, 0-表示成功, 其他-失败
   "errmsg": "账号或密码错误",// 错误信息
-  "success": true,// 业务处理成功
   "data": {
     "token": "xxx-xxx-xx"
   }
@@ -86,8 +98,7 @@ $ npm run build # 生产打包
 ```js
 {
   "errcode": 0,
-  "errmsg": "success",
-  "success": true,
+  "errmsg": "错误信息...",
   "data": {
     // 权限码
     "permissionCodeList": [
@@ -111,25 +122,25 @@ $ npm run build # 生产打包
 
 ```js
 {
-  "errcode": 123,
+  "errcode": 0,
   "errmsg": "退出登录失败",
-  "success": true,
   "data": null
 }
 ```
 
-### 3.2. 开发新页面
+### 3.3. 开发新页面
 
 1. 新建文件: `src/pages/*`
 2. 配置路由: `config/routes.ts`
-3. 如果需要权限控制, 添加权限码`src/utils/permissionMap.ts`, 在路由中配置对应的 `access`
+3. 如果需要权限控制: 添加权限码`src/utils/permissionMap.ts`, 在路由中配置对应的 `access`
 
-### 3.3 定义请求方法和 ts 类型的位置
+### 3.4. 定义请求方法和 ts 类型的位置
 
-- 定义公共请求方法 `src/services/xxx.ts`
-- 定义页面独有请求方法 `src/pages/xxx/services.ts`
+- 定义公共的请求方法 `src/services/***.ts`
 - 定义公共的 ts 类型 `src/services/API.d.ts`
-- 定义页面独有的 ts 类型 `src/pages/xxx/data.d.ts`
+
+- 定义页面独有的请求方法 `src/pages/***/services.ts`
+- 定义页面独有的 ts 类型 `src/pages/***/data.d.ts`
 
 ## 4. 目录
 
