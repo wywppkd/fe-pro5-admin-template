@@ -8,5 +8,9 @@ module.exports = {
   rules: {
     'no-console': 'off',
     '@typescript-eslint/no-shadow': ['off'], // 当前作用域变量名不能与父级作用域变量同名
+    'no-plusplus': 'off',
+    'global-require': 'off',
+    'react-hooks/exhaustive-deps': 'error',
+    'no-empty': 'off',
   },
 };

@@ -9,7 +9,7 @@ type RequestOption = {
    */
   url: string;
   /**
-   * 是否跳过 umi-request 的错误处理(errorHandler), 是则需要在页面上自行处理
+   * 是否跳过 res.errcode !== 0 时的统一错误处理(errorHandler)
    * 默认值 false
    */
   skipErrorHandler?: boolean;
