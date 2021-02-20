@@ -16,6 +16,7 @@ export const initialStateConfig = {
   loading: <PageLoading />,
 };
 
+// https://umijs.org/zh-CN/plugins/plugin-initial-state
 /** getInitialState 会在整个应用最开始时执行 */
 export async function getInitialState(): Promise<{
   settings?: LayoutSettings;
@@ -33,7 +34,7 @@ export async function getInitialState(): Promise<{
     }
     return undefined;
   };
-  // 进入应用, 判断是非登录页, 则获取用户信息
+  // 非登录页
   if (history.location.pathname !== '/user/login') {
     const currentUser = await fetchUserInfo();
     return {
@@ -42,12 +43,14 @@ export async function getInitialState(): Promise<{
       settings: defaultSettings,
     };
   }
+  // 登录页
   return {
     fetchUserInfo,
     settings: defaultSettings,
   };
 }
 
+// https://umijs.org/zh-CN/plugins/plugin-layout
 export const layout = ({
   initialState,
 }: {
@@ -59,6 +62,7 @@ export const layout = ({
     rightContentRender: () => <RightContent />,
     disableContentMargin: false,
     footerRender: () => <Footer />,
+    // 页面跳转
     onPageChange: async () => {
       const { currentUser } = initialState;
       const { location } = history;
