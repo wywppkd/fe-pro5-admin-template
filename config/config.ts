@@ -14,6 +14,7 @@ export default defineConfig({
   // dva: {
   //   hmr: true,
   // },
+  // 支持 ProLayout 的配置: https://procomponents.ant.design/components/layout#prolayout
   layout: {
     name: '',
     // 是否开启国际化配置: 如菜单名会从 locales 中查找
@@ -33,6 +34,7 @@ export default defineConfig({
     // 是否开启浏览器语言检测: 通过 `navigator.language` 覆盖默认值
     baseNavigator: false,
   },
+  // 开启按需加载: 将路由组件单独拆出
   dynamicImport: {
     loading: '@ant-design/pro-layout/es/PageLoading',
   },
@@ -57,6 +59,7 @@ export default defineConfig({
   history: {
     type: 'browser',
   },
+  // 静态化: 为每个路由输出一个 html 文件
   // exportStatic: {},
   mock: false,
   // 路由前缀
