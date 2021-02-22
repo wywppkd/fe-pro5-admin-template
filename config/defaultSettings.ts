@@ -4,7 +4,7 @@ const Settings: LayoutSettings & {
   pwa?: boolean;
   logo?: string;
 } = {
-  navTheme: 'light',
+  navTheme: 'light', // "realDark"-暗黑模式
   // 拂晓蓝
   primaryColor: '#1890ff',
   layout: 'mix',

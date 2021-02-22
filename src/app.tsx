@@ -8,6 +8,7 @@ import { ResponseError } from 'umi-request';
 import { queryCurrent } from './services/user';
 import defaultSettings from '../config/defaultSettings';
 import { getToken, removeToken } from './utils/auth';
+import goLoginPage from './utils/goLoginPage';
 
 /**
  * 获取用户信息比较慢的时候会展示一个 loading
@@ -30,7 +31,7 @@ export async function getInitialState(): Promise<{
       return currentUser.data;
     } catch (error) {
       removeToken();
-      history.push('/user/login');
+      goLoginPage();
     }
     return undefined;
   };
@@ -70,7 +71,7 @@ export const layout = ({
       // 判断登录状态(无token或者无currentUser)
       if ((!token || !currentUser) && location.pathname !== '/user/login') {
         removeToken();
-        history.push('/user/login');
+        goLoginPage();
       }
     },
     menuHeaderRender: undefined,
@@ -121,7 +122,7 @@ const errorHandler = (error: ResponseError) => {
       // 10110002: 登录过期, token无效等表示需要重新登录
       removeToken();
       message.error('你的登录已失效, 请重新登录');
-      history.push('/user/login');
+      goLoginPage();
     } else {
       // 其他错误码统一提示
       message.error(`${errmsg}(错误码:${errcode})`);
@@ -138,6 +139,7 @@ const errorHandler = (error: ResponseError) => {
 
 export const request: RequestConfig = {
   errorHandler,
+  prefix: REACT_APP_API_URL,
   /**
    * https://umijs.org/zh-CN/plugins/plugin-request
    * 当后端接口不满足 plugin-request 规范的时候你需要通过该配置把后端接口数据转换为该格式

@@ -10,14 +10,19 @@ export default defineConfig({
   // 是否开启打包后文件的 hash 后缀
   hash: true,
   // 开启 antd
-  antd: {},
+  antd: {
+    // dark: true, // 开启暗黑模式
+  },
+  define: {
+    REACT_APP_API_URL: '',
+  },
   // dva: {
   //   hmr: true,
   // },
   // 支持 ProLayout 的配置: https://procomponents.ant.design/components/layout#prolayout
   layout: {
     name: '',
-    // 是否开启国际化配置: 如菜单名会从 locales 中查找
+    // 是否开启国际化配置(需要配置 plugin-locale 插件): 菜单名, 插件
     locale: true,
     siderWidth: 208,
     menu: {
@@ -62,6 +67,7 @@ export default defineConfig({
   // 静态化: 为每个路由输出一个 html 文件
   // exportStatic: {},
   mock: false,
+  outputPath: 'dist', // TODO, 输出路径
   // 路由前缀
   base: '/', // TODO, 当网站根路径是 https://www.baidu.com/app/ 时, 设置为 /app/
   // 静态文件路径

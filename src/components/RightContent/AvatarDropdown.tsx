@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
 import { LogoutOutlined } from '@ant-design/icons';
 import { Avatar, Menu, Spin } from 'antd';
-import { history, useModel } from 'umi';
+import { useModel } from 'umi';
 import { outLogin } from '@/services/login';
 // import { stringify } from 'querystring';
 import { removeToken } from '@/utils/auth';
+import goLoginPage from '@/utils/goLoginPage';
 import HeaderDropdown from '../HeaderDropdown';
 import styles from './index.less';
 
@@ -22,9 +23,7 @@ const loginOut = async () => {
   // Note: There may be security issues, please note
   if (window.location.pathname !== '/user/login') {
     removeToken();
-    history.replace({
-      pathname: '/user/login',
-    });
+    goLoginPage();
   }
 };
 
@@ -43,8 +42,8 @@ const AvatarDropdown = () => {
         setInitialState({ ...initialState, currentUser: undefined });
         loginOut();
       }
-      // history.push(`/account/${key}`);
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
