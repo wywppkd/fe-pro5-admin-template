@@ -53,6 +53,7 @@
     "@umijs/route-utils": "^1.0.33",
     "antd": "^4.7.0",
     "classnames": "^2.2.6",
+    "file-saver": "^2.0.5",
     "js-cookie": "^2.2.1",
     "lodash": "^4.17.11",
     "moment": "^2.25.3",
@@ -63,12 +64,14 @@
     "react-helmet-async": "^1.0.4",
     "umi": "^3.2.14",
     "umi-request": "^1.0.8",
-    "use-merge-value": "^1.0.1"
+    "use-merge-value": "^1.0.1",
+    "xlsx": "^0.16.9"
   },
   "devDependencies": {
     "@ant-design/pro-cli": "^2.0.2",
     "@types/classnames": "^2.2.7",
     "@types/express": "^4.17.0",
+    "@types/file-saver": "^2.0.1",
     "@types/history": "^4.7.2",
     "@types/jest": "^26.0.0",
     "@types/js-cookie": "^2.2.6",

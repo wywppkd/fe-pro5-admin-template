@@ -141,6 +141,29 @@ $ npm run lint:fix # eslint 修复 & stylelint 修复
 - 定义页面独有的请求方法 `src/pages/***/services.ts`
 - 定义页面独有的 ts 类型 `src/pages/***/data.d.ts`
 
+### 3.5. 根据 url 下载文件(图片, pdf, doc...)
+
+```js
+import saveFile from '@/utils/saveFile';
+
+// 下载文件
+saveFile('文件url', '自定义文件名, 不传则根据 url 后缀读取原文件名');
+```
+
+### 3.6. 前端导出 excel
+
+```js
+import { export_json_to_excel } from '@/utils/export2Excel';
+
+export_json_to_excel({
+  header: ['姓名', '年龄'],
+  data: [
+    ['张三', 18],
+    ['李四', 22],
+  ],
+});
+```
+
 ## 4. 目录
 
 ```bash
