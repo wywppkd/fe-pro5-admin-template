@@ -17,6 +17,8 @@ type RequestOption = {
    * 请求参数
    */
   data?: any;
+  /** 如何解析返回类型, 如: 下载文件设置为 blob, 即可通过 file-saver 下载该文件 */
+  responseType?: 'blob' | 'json' | 'text' | 'arrayBuffer' | 'formData' | undefined;
 };
 
 export default {
@@ -32,6 +34,7 @@ export default {
       method: 'post',
       data: option.data,
       skipErrorHandler: option.skipErrorHandler,
+      responseType: option.responseType,
     });
   },
   delete(option: RequestOption): Promise<any> {

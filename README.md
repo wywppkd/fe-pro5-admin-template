@@ -164,6 +164,28 @@ export_json_to_excel({
 });
 ```
 
+### 3.7. 如何下载文件流
+
+```js
+// service.ts: 定义请求方法
+import request from '@/utils/request';
+
+export function downLoad() {
+  return request.post({
+    url: '/xxx',
+    skipErrorHandler: true, // 忽略错误码检查
+    responseType: 'blob', // 告诉 fetch 如何解析返回的数据(应该是调用了 response.blob())
+  });
+}
+
+// xxx.tsx: 使用
+import { saveAs } from 'file-saver';
+
+downLoad().then((res) => {
+  saveAs(res, '文件名.xlsx');
+});
+```
+
 ## 4. 目录
 
 ```bash
