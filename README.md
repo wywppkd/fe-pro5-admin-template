@@ -247,7 +247,3 @@ downLoad().then((res) => {
 │       └── utils.ts
 └── tsconfig.json
 ```
-
-## 5. 待完善
-
-- 如果使用了 CORS 解决跨域问题, 并且想要根据环境变量设置 umi-request 的 prefix, 解决思路 [umi 多环境多份配置](https://umijs.org/zh-CN/docs/config#%E5%A4%9A%E7%8E%AF%E5%A2%83%E5%A4%9A%E4%BB%BD%E9%85%8D%E7%BD%AE)
