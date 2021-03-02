@@ -15,7 +15,7 @@ const Settings: LayoutSettings & {
   title: '后台管理系统', // TODO: 系统名, 显示位置: 导航栏左侧logo文案 + 页面title后缀
   pwa: false,
   // logo: 'https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg',
-  logo: '/logo.png',
+  logo: '/logo.png', // TODO: logo图片, public目录下的图片需要加上 ${publicPath} 路径
   iconfontUrl: '',
 };
 
